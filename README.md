@@ -25,6 +25,7 @@ These env vars are applied to swarm-operator so it can connect to the Slack API 
 environment:
     - SLACK_BOT_API_KEY_PATH=/run/secrets/swarm-operator-slack-bot-token
     - SLACK_WORKSPACE_API_KEY_PATH=/run/secrets/swarm-operator-slack-workspace-token
+    - SLACK_EMAIL_DOMAIN=indeed.com
     - LOG_URL_FORMAT=https://kibana.internal.net/app/kibana#/discover?query=%[1]s
     - DEPLOY_URL_FORMAT=https://swarm.internal.net/service/ps/%s
 ```

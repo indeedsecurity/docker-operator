@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/docker/docker/api/types/filters"
+	"github.com/nlopes/slack"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/docker/docker/api/types"
@@ -67,11 +69,42 @@ func (d *daemon) eventService(e events.Message) {
 				}
 			}
 
+			// Build message text
+			var text string
+			if len(ev.ServiceName) > 1 {
+				text += "*Service Name:* " + ev.ServiceName + "\n"
+				text += "*Service Description:* " + ev.ServiceDescription + "\n"
+				text += "*Service Deploy Status:* " + ev.ServiceDeployStatus + "\n"
+			}
+			if len(ev.Repository) > 1 {
+				text += "*Repository:* " + ev.Repository + "\n"
+			}
+			text += "*Image Name:* " + ev.ImageName + "\n"
+			text += "*Actions:* " + e.Action + "\n"
+			text += "*Type:* " + e.Type + "\n"
+			text += "*Actor ID:* " + e.Actor.ID + "\n"
+			text += "*ID:* " + container.ID + "\n"
+			text += "*Scope:* " + e.Scope + "\n"
+			text += "*Status:* " + container.Status + "\n"
+			text += "*State:* " + container.State + "\n"
+			text += "*Time:* " + time.Unix(e.Time, 0).String() + "\n"
+
+			text += "*Attributes*\n"
+			for attr, val := range e.Actor.Attributes {
+				text += "\t" + attr + ": " + val + "\n"
+			}
+			var msgOptions []slack.MsgOption
+			msgOptions = append(msgOptions, slack.MsgOptionText(text, false))
+			// this dumb option makes it use the name you give it rather than just "bot"
+			msgOptions = append(msgOptions, slack.MsgOptionAsUser(true))
 			evJSON, err := json.Marshal(ev)
 			if err != nil {
 				log.Error(err)
 			}
 			fmt.Printf("%s\n", evJSON)
+			if d.slackEnabled {
+				d.sendSlackMessage(ev.Experts, "", msgOptions...)
+			}
 		}
 	}
 	cancel()

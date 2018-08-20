@@ -10,6 +10,7 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/events"
+	"github.com/nlopes/slack"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -70,10 +71,31 @@ func (d *daemon) eventContainer(e events.Message) {
 			}
 		}
 
+		var text string
+		if len(ev.ServiceName) > 1 {
+			text += "*Service Name:* " + ev.ServiceName + "\n"
+			text += "*Service Description:* " + ev.ServiceDescription + "\n"
+			text += "*Service Deploy Status:* " + ev.ServiceDeployStatus + "\n"
+		}
+		if len(ev.Repository) > 1 {
+			text += "*Repository:* " + ev.Repository + "\n"
+		}
+		text += "*Image Name:* " + ev.ImageName + "\n"
+		text += "*Event Type:* " + ev.EventType + "\n"
+		text += "*Exit Code:* " + ev.ExitCode + "\n"
+		var msgOptions []slack.MsgOption
+		msgOptions = append(msgOptions, slack.MsgOptionText(text, false))
+
+		// this dumb option makes it use the name you give it rather than just "bot"
+		msgOptions = append(msgOptions, slack.MsgOptionAsUser(true))
+
 		evJSON, err := json.Marshal(ev)
 		if err != nil {
 			log.Error(err)
 		}
 		fmt.Printf("%s\n", evJSON)
+		if d.slackEnabled {
+			d.sendSlackMessage(ev.Experts, ev.Logs, msgOptions...)
+		}
 	}
 }

@@ -19,8 +19,9 @@ const defaultOOMerTick = 60
 const defaultPruneTick = 1800
 
 type config struct {
-	logURLFormat    string
-	deployURLFormat string
+	logURLFormat     string
+	deployURLFormat  string
+	slackEmailDomain string
 }
 
 type daemon struct {
@@ -35,12 +36,14 @@ type daemon struct {
 	slackEnabled         bool
 	slackBot             *slack.Client
 	slackWorkspace       *slack.Client
+	slackUsers           map[string]string
 }
 
 func newDaemon() *daemon {
 	log.SetFormatter(&log.JSONFormatter{})
 	slackBotAPIKeyPath := os.Getenv("SLACK_BOT_API_KEY_PATH")
 	slackWorkspaceAPIKeyPath := os.Getenv("SLACK_WORKSPACE_API_KEY_PATH")
+	slackEmailDomain := os.Getenv("SLACK_EMAIL_DOMAIN")
 	logURLFormat := os.Getenv("LOG_URL_FORMAT")
 	deployURLFormat := os.Getenv("DEPLOY_URL_FORMAT")
 
@@ -83,6 +86,7 @@ func newDaemon() *daemon {
 		if botAPI != nil && workspaceAPI != nil {
 			d.slackBot = botAPI
 			d.slackWorkspace = workspaceAPI
+			d.config.slackEmailDomain = slackEmailDomain
 			d.slackEnabled = true
 		}
 	}
