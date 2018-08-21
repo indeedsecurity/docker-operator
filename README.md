@@ -8,18 +8,20 @@
 
 ## container labels
 
-These labels are applied to workload containers read by swarm operator to direct and enrich messages when reporting events
+These labels are applied to workload containers read by docker-operator to direct and enrich messages when reporting events
 
 ```yaml
 labels:
   # try to have 2+ experts for each service.
   # these are used for event notifications.
-  # specify the email username.
+  # specify the full email used for slack or specify the username and SLACK_EMAIL_DOMAIN env var.
   - "experts=dustind,jdoe"
   - "description="acme service farms chickens"
 ```
 
-These env vars are applied to swarm-operator so it can connect to the Slack API (optional) and provide enrichement (optional)
+These env vars are applied to docker-operator so it can connect to the Slack API (optional) and provide enrichement (optional)
+
+Right now `LOG_URL_FORMAT` and `DEPLOY_URL_FORMAT` only supports substituting Docker Swarm service names from the `com.docker.swarm.service.name` container label, but it could easily support others with minor improvements.
 
 ```yaml
 environment:
