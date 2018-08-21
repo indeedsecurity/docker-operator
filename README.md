@@ -25,8 +25,8 @@ Right now `LOG_URL_FORMAT` and `DEPLOY_URL_FORMAT` only supports substituting Do
 
 ```yaml
 environment:
-    - SLACK_BOT_API_KEY_PATH=/run/secrets/swarm-operator-slack-bot-token
-    - SLACK_WORKSPACE_API_KEY_PATH=/run/secrets/swarm-operator-slack-workspace-token
+    - SLACK_BOT_API_KEY_PATH=/run/secrets/docker-operator-slack-bot-token
+    - SLACK_WORKSPACE_API_KEY_PATH=/run/secrets/docker-operator-slack-workspace-token
     - SLACK_EMAIL_DOMAIN=indeed.com
     - LOG_URL_FORMAT=https://kibana.internal.net/app/kibana#/discover?query=%[1]s
     - DEPLOY_URL_FORMAT=https://swarm.internal.net/service/ps/%s
