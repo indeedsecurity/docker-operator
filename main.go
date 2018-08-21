@@ -96,7 +96,7 @@ func newDaemon() *daemon {
 
 func (d *daemon) quit() {
 	<-d.signals
-	log.Println("shutting down")
+	log.Info("shutting down")
 	// d.signalOOMer <- s
 	// d.signalPruner <- s
 	// d.signalEventCollector <- s

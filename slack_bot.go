@@ -10,6 +10,7 @@ import (
 func (d *daemon) sendSlackMessage(experts []string, logs string, options ...slack.MsgOption) {
 	var users []string
 	if len(experts) == 1 && experts[0] == "" {
+		// TODO - fall back to (optional) default experts
 		log.Info("No experts: %v", experts)
 		return
 	}

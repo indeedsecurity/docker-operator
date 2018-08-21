@@ -43,3 +43,9 @@ restart_policy:
     max_attempts: 3
     window: 120s # monitors the process for this period
 ```
+
+## todo
+
+- add K8s support
+- add fork bomb prevention (via parent cgroup pids.max)
+- add other notification mechanisms

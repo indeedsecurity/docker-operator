@@ -25,6 +25,7 @@ func (d *daemon) eventContainer(e events.Message) {
 			return
 		}
 
+		// TODO - health status events
 		if e.Status == "health_status" {
 			spew.Dump(e)
 		}

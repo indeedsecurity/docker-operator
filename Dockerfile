@@ -6,7 +6,6 @@ RUN apk --update add ca-certificates
 RUN apk add --no-cache git
 ADD https://github.com/golang/dep/releases/download/v0.4.1/dep-linux-amd64 /usr/bin/dep
 RUN chmod +x /usr/bin/dep
-RUN adduser -D -u 59999 container-user
 WORKDIR /go/src/github.com/indeedsecurity/docker-operator
 COPY Gopkg.toml Gopkg.lock ./
 RUN dep ensure --vendor-only
