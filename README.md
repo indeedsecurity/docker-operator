@@ -6,6 +6,8 @@
 - performs [system prune](https://docs.docker.com/engine/reference/commandline/system_prune/#usage) operations via Docker API
 - processes events from the Docker [events API](https://docs.docker.com/engine/api/v1.31/#operation/SystemEvents) and notify owners on Slack based on the `experts` container label (comma separated)
 
+<img width="600px" alt="example notification" src="example-notification.png">
+
 ## container labels
 
 These labels are applied to workload containers read by docker-operator to direct and enrich messages when reporting events
