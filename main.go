@@ -64,6 +64,7 @@ func newDaemon() *daemon {
 		cancelCtx:    cancel,
 		signals:      make(chan os.Signal),
 		slackEnabled: false,
+		slackUsers:   make(map[string]string),
 		// signalOOMer:          make(chan os.Signal),
 		// signalEventCollector: make(chan os.Signal),
 	}
